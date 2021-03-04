@@ -5,23 +5,25 @@
 
 using namespace Rcpp;
 
-// rcpp_hello
-Rcpp::List rcpp_hello();
-RcppExport SEXP _tidysq_template_rcpp_hello() {
+// CPP_AAC
+Rcpp::DataFrame CPP_AAC(const Rcpp::List& x, const std::basic_string<char>& NA_letter);
+RcppExport SEXP _tidysqadv_CPP_AAC(SEXP xSEXP, SEXP NA_letterSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_hello());
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const std::basic_string<char>& >::type NA_letter(NA_letterSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPP_AAC(x, NA_letter));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_tidysq_template_rcpp_hello", (DL_FUNC) &_tidysq_template_rcpp_hello, 0},
+    {"_tidysqadv_CPP_AAC", (DL_FUNC) &_tidysqadv_CPP_AAC, 2},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_tidysq_template(DllInfo *dll) {
+RcppExport void R_init_tidysqadv(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

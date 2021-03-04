@@ -1,7 +1,8 @@
-Package: tidysq.template
+Package: tidysqadv
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Advanced Algorithms of Biological Sequence Processing
 Version: 0.1.0
+Date: 2021-03-04
 Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
@@ -9,8 +10,13 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Imports: Rcpp (>= 1.0.5), tidysq (>= 1.1.0)
+Imports:
+    tidysq (>= 1.1.0),
+    Rcpp (>= 1.0.5)
 SystemRequirements: GNU make,
                     C++17
-LinkingTo: Rcpp, tidysq
+LinkingTo:
+    Rcpp,
+    tidysq,
+    testthat
 RoxygenNote: 7.1.1

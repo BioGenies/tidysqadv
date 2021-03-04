@@ -1,37 +1,24 @@
-# History files
+.Rproj.user
 .Rhistory
-.Rapp.history
-
-# Session Data files
 .RData
-
-# User-specific files
 .Ruserdata
+tidysq.Rproj
+*.o
+*.so
 
-# Example code in package build process
-*-Ex.R
+src/Makevars
 
-# Output files from R CMD build
-/*.tar.gz
+config.log
 
-# Output files from R CMD check
-/*.Rcheck/
+config.status
 
-# RStudio files
-.Rproj.user/
-*.Rproj
+src/tidysq.dll
 
-# produced vignettes
-vignettes/*.html
-vignettes/*.pdf
+src/main.cpp
 
-# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
-.httr-oauth
+.idea/
 
-# knitr and R markdown default cache directories
-*_cache/
-/cache/
+cmake-build-debug/
 
-# Temporary files created by R markdown
-*.utf8.md
-*.knit.md
+CMakeLists.txt
+inst/doc
