@@ -54,5 +54,9 @@ computing_kernel.default <- function(x, max_kmer_length = 5, exponential = 0.125
 #' @export
 computing_kernel.sq_ami_bsc <- function(x, max_kmer_length = 5, exponential = 0.125, ...,
                                         NA_letter = getOption("tidysq_NA_letter")) {
+  assert_count(max_kmer_length)
+  assert_number(exponential, lower = 0)
+  assert_string(NA_letter, min.chars = 1)
+  
   CPP_computing_kernel(x, max_kmer_length, exponential, NA_letter)
 }

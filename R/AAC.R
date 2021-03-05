@@ -34,5 +34,7 @@ AAC.default <- function(x, ...)
 #' @export
 AAC.sq_ami_bsc <- function(x, ...,
                            NA_letter = getOption("tidysq_NA_letter")) {
+  assert_string(NA_letter, min.chars = 1)
+  
   CPP_AAC(x, NA_letter)
 }
