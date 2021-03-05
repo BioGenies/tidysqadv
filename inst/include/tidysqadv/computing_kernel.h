@@ -14,8 +14,8 @@ namespace tidysq {
                            typename tidysq::Sequence<INTERNAL>::const_iterator iterator_2_start,
                            const LenSq &kmer_length,
                            const double &exponential = 0.1) {
-        return std::inner_product(iterator_1_start, iterator_1_start + kmer_length, iterator_2_start, 0.0,
-                std::plus<>(), [&exponential](auto const &codon_1, auto const &codon_2) {
+        return std::inner_product(iterator_1_start, iterator_1_start + kmer_length, iterator_2_start, 1.0,
+                std::multiplies<>(), [&exponential](auto const &codon_1, auto const &codon_2) {
             return kernel_1(codon_1, codon_2, exponential);
         });
     }
@@ -30,10 +30,12 @@ namespace tidysq {
         for (LenSq kmer_length = 1; kmer_length <= max_kmer_length; ++kmer_length) {
             // Execute the loop only if sequence 1 can fit a k-mer of this length
             if (kmer_length <= sequence_1.original_length()) {
-                for (auto iterator_1 = sequence_1.begin(alph_size); iterator_1 + kmer_length < sequence_1.end(alph_size); ++iterator_1) {
+                auto sequence_1_end = sequence_1.end(alph_size) - kmer_length;
+                for (auto iterator_1 = sequence_1.begin(alph_size); iterator_1 <= sequence_1_end; ++iterator_1) {
                     // Execute the loop only if sequence 2 can fit a k-mer of this length
                     if (kmer_length <= sequence_2.original_length()) {
-                        for (auto iterator_2 = sequence_2.begin(alph_size); iterator_2 + kmer_length < sequence_2.end(alph_size); ++iterator_2) {
+                        auto sequence_2_end = sequence_2.end(alph_size) - kmer_length;
+                        for (auto iterator_2 = sequence_2.begin(alph_size); iterator_2 <= sequence_2_end; ++iterator_2) {
                             ret += kernel_2<INTERNAL>(iterator_1, iterator_2, kmer_length, exponential);
                         }
                     }
