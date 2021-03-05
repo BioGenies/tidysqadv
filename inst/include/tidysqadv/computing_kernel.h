@@ -46,6 +46,28 @@ namespace tidysq {
         return kernel_3(sequence_1, sequence_2, alph_size, max_kmer_length, exponential) / sqrt(
                 kernel_3(sequence_1, sequence_1, alph_size, max_kmer_length, exponential) *
                 kernel_3(sequence_2, sequence_2, alph_size, max_kmer_length, exponential)
-                );
+        );
+    }
+
+    template<typename INTERNAL>
+    inline std::vector<std::vector<double>> correlation_kernel_3(const Sq<INTERNAL> &sq,
+                                       const LenSq &max_kmer_length,
+                                       const double &exponential = 0.1) {
+        if (sq.type() != AMI_BSC) {
+            throw std::invalid_argument("sq object must be of basic amino acid alphabet");
+        }
+
+        const AlphSize alph_size = sq.alphabet().alphabet_size();
+        // Initializes returned correlation matrix with 1s, because correlation of a sequence to itself is equal to 1
+        std::vector<std::vector<double>> ret(sq.size(), std::vector<double>(sq.size(), 1));
+        for (LenSq i = 0; i < sq.size(); ++i) {
+            for (LenSq j = i + 1; j < sq.size(); ++j) {
+                const double correlation_score = correlation_kernel_3(
+                        sq[i].get(), sq[j].get(), alph_size, max_kmer_length, exponential);
+                ret[i][j] = correlation_score;
+                ret[j][i] = correlation_score;
+            }
+        }
+        return ret;
     }
 }

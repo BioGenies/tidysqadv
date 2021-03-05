@@ -18,7 +18,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPP_computing_kernel
-Rcpp::NumericVector CPP_computing_kernel(const Rcpp::List& x, const R_xlen_t& max_kmer_length, const double exponential, const std::basic_string<char>& NA_letter);
+Rcpp::NumericMatrix CPP_computing_kernel(const Rcpp::List& x, const R_xlen_t& max_kmer_length, const double exponential, const std::basic_string<char>& NA_letter);
 RcppExport SEXP _tidysqadv_CPP_computing_kernel(SEXP xSEXP, SEXP max_kmer_lengthSEXP, SEXP exponentialSEXP, SEXP NA_letterSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
