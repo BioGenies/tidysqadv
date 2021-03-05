@@ -28,9 +28,15 @@ namespace tidysq {
                            const double &exponential = 0.1) {
         double ret = 0.0;
         for (LenSq kmer_length = 1; kmer_length <= max_kmer_length; ++kmer_length) {
-            for (auto iterator_1 = sequence_1.begin(alph_size); iterator_1 + kmer_length < sequence_1.end(alph_size); ++iterator_1) {
-                for (auto iterator_2 = sequence_2.begin(alph_size); iterator_2 + kmer_length < sequence_2.end(alph_size); ++iterator_2) {
-                    ret += kernel_2<INTERNAL>(iterator_1, iterator_2, kmer_length, exponential);
+            // Execute the loop only if sequence 1 can fit a k-mer of this length
+            if (kmer_length <= sequence_1.original_length()) {
+                for (auto iterator_1 = sequence_1.begin(alph_size); iterator_1 + kmer_length < sequence_1.end(alph_size); ++iterator_1) {
+                    // Execute the loop only if sequence 2 can fit a k-mer of this length
+                    if (kmer_length <= sequence_2.original_length()) {
+                        for (auto iterator_2 = sequence_2.begin(alph_size); iterator_2 + kmer_length < sequence_2.end(alph_size); ++iterator_2) {
+                            ret += kernel_2<INTERNAL>(iterator_1, iterator_2, kmer_length, exponential);
+                        }
+                    }
                 }
             }
         }
