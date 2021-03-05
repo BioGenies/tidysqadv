@@ -5,3 +5,7 @@ CPP_AAC <- function(x, NA_letter) {
     .Call(`_tidysqadv_CPP_AAC`, x, NA_letter)
 }
 
+CPP_computing_kernel <- function(x, max_kmer_length, exponential, NA_letter) {
+    .Call(`_tidysqadv_CPP_computing_kernel`, x, max_kmer_length, exponential, NA_letter)
+}
+

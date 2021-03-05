@@ -664,35 +664,31 @@ switch (value_2) {                                                              
     default:    throw std::invalid_argument("translation must be made with twenty standard amino acid letters only");  \
 }
 
-#define FIRST_CODON                                                                                                    \
-switch (value_1) {                                                                                                     \
-    case 0u:    SECOND_CODON(0)                                                                                        \
-    case 1u:    SECOND_CODON(1)                                                                                        \
-    case 2u:    SECOND_CODON(2)                                                                                        \
-    case 3u:    SECOND_CODON(3)                                                                                        \
-    case 4u:    SECOND_CODON(4)                                                                                        \
-    case 5u:    SECOND_CODON(5)                                                                                        \
-    case 6u:    SECOND_CODON(6)                                                                                        \
-    case 7u:    SECOND_CODON(7)                                                                                        \
-    case 8u:    SECOND_CODON(8)                                                                                        \
-    case 9u:    SECOND_CODON(9)                                                                                        \
-    case 10u:    SECOND_CODON(10)                                                                                      \
-    case 11u:    SECOND_CODON(11)                                                                                      \
-    case 12u:    SECOND_CODON(12)                                                                                      \
-    case 13u:    SECOND_CODON(13)                                                                                      \
-    case 14u:    SECOND_CODON(14)                                                                                      \
-    case 15u:    SECOND_CODON(15)                                                                                      \
-    case 16u:    SECOND_CODON(16)                                                                                      \
-    case 17u:    SECOND_CODON(17)                                                                                      \
-    case 18u:    SECOND_CODON(18)                                                                                      \
-    case 19u:    SECOND_CODON(19)                                                                                      \
-    default:    throw std::invalid_argument("translation must be made with twenty standard amino acid letters only");  \
-}
-
     constexpr double read_BLOSUM62_2(LetterValue value_1, LetterValue value_2) {
-        FIRST_CODON
+        switch (value_1) {
+            case 0u:    SECOND_CODON(0)
+            case 1u:    SECOND_CODON(1)
+            case 2u:    SECOND_CODON(2)
+            case 3u:    SECOND_CODON(3)
+            case 4u:    SECOND_CODON(4)
+            case 5u:    SECOND_CODON(5)
+            case 6u:    SECOND_CODON(6)
+            case 7u:    SECOND_CODON(7)
+            case 8u:    SECOND_CODON(8)
+            case 9u:    SECOND_CODON(9)
+            case 10u:   SECOND_CODON(10)
+            case 11u:   SECOND_CODON(11)
+            case 12u:   SECOND_CODON(12)
+            case 13u:   SECOND_CODON(13)
+            case 14u:   SECOND_CODON(14)
+            case 15u:   SECOND_CODON(15)
+            case 16u:   SECOND_CODON(16)
+            case 17u:   SECOND_CODON(17)
+            case 18u:   SECOND_CODON(18)
+            case 19u:   SECOND_CODON(19)
+            default:    throw std::invalid_argument("translation must be made with twenty standard amino acid letters only");
+        }
     }
 
-#undef FIRST_CODON
 #undef SECOND_CODON
 }

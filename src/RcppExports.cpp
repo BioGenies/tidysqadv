@@ -17,9 +17,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPP_computing_kernel
+Rcpp::NumericVector CPP_computing_kernel(const Rcpp::List& x, const R_xlen_t& max_kmer_length, const double exponential, const std::basic_string<char>& NA_letter);
+RcppExport SEXP _tidysqadv_CPP_computing_kernel(SEXP xSEXP, SEXP max_kmer_lengthSEXP, SEXP exponentialSEXP, SEXP NA_letterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const R_xlen_t& >::type max_kmer_length(max_kmer_lengthSEXP);
+    Rcpp::traits::input_parameter< const double >::type exponential(exponentialSEXP);
+    Rcpp::traits::input_parameter< const std::basic_string<char>& >::type NA_letter(NA_letterSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPP_computing_kernel(x, max_kmer_length, exponential, NA_letter));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_tidysqadv_CPP_AAC", (DL_FUNC) &_tidysqadv_CPP_AAC, 2},
+    {"_tidysqadv_CPP_computing_kernel", (DL_FUNC) &_tidysqadv_CPP_computing_kernel, 4},
     {NULL, NULL, 0}
 };
 
