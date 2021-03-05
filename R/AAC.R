@@ -8,6 +8,11 @@
 #' @template three-dots
 #' @template NA_letter
 #'
+#' @return A \code{\link[tibble]{tibble}} with number of rows equal to the
+#' number of sequences and twenty columns. Each column has one-letter name equal
+#' to one-letter code of respective amino acid and contains frequencies of this
+#' amino acid in respective sequences from range [0, 1].
+#'
 #' @details
 #' Frequency of an amino acid is understood as the number of times this amino
 #' acid appears in the sequence divided by total number of elements of this

@@ -20,6 +20,12 @@ A string that is used to interpret and display \code{NA} value in the
 context of \code{\link[=sq-class]{sq class}}. Default value equals to
 "\code{!}".}
 }
+\value{
+A \code{\link[tibble]{tibble}} with number of rows equal to the
+number of sequences and twenty columns. Each column has one-letter name equal
+to one-letter code of respective amino acid and contains frequencies of this
+amino acid in respective sequences from range [0, 1].
+}
 \description{
 Computes AAC (Amino Acid Composition) matrix, which contains
 frequencies of each of 20 basic amino acids for each sequence.
