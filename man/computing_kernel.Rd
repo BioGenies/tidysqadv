@@ -45,6 +45,10 @@ Uses computing kernel to compute sequence similarity. Similarity
 is expressed as a number from range [0, 1], where 1 means equality.
 }
 \details{
+This algorithm is based on the paper called "Towards a Mathematical
+Foundation of Immunology and Amino Acid Chains" by Wen-Jun Shen,
+Hau-San Wong, Quan-Wu Xiao, Xin Guo and Stephen Smale (arXiv:1205.6031).
+
 This sequence correlation method does not employ any alignment methods in its
 computations. Instead, it bases heavily on k-mers, comparing analogous k-mers
 across sequences.
