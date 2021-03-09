@@ -31,10 +31,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPP_molecular_weight
+Rcpp::NumericVector CPP_molecular_weight(const Rcpp::List& x, const std::string& type, const std::string& NA_letter);
+RcppExport SEXP _tidysqadv_CPP_molecular_weight(SEXP xSEXP, SEXP typeSEXP, SEXP NA_letterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type type(typeSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type NA_letter(NA_letterSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPP_molecular_weight(x, type, NA_letter));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_tidysqadv_CPP_AAC", (DL_FUNC) &_tidysqadv_CPP_AAC, 2},
     {"_tidysqadv_CPP_computing_kernel", (DL_FUNC) &_tidysqadv_CPP_computing_kernel, 4},
+    {"_tidysqadv_CPP_molecular_weight", (DL_FUNC) &_tidysqadv_CPP_molecular_weight, 3},
     {NULL, NULL, 0}
 };
 

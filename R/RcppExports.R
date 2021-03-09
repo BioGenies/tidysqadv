@@ -9,3 +9,7 @@ CPP_computing_kernel <- function(x, max_kmer_length, exponential, NA_letter) {
     .Call(`_tidysqadv_CPP_computing_kernel`, x, max_kmer_length, exponential, NA_letter)
 }
 
+CPP_molecular_weight <- function(x, type, NA_letter) {
+    .Call(`_tidysqadv_CPP_molecular_weight`, x, type, NA_letter)
+}
+
