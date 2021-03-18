@@ -10,6 +10,25 @@ namespace tidysq {
     }
 
     template<typename INTERNAL>
+    inline double kernels_2_3(const Sequence<INTERNAL> &sequence_1,
+                              const Sequence<INTERNAL> &sequence_2,
+                              const AlphSize &alph_size,
+                              const LenSq &max_kmer_length,
+                              const double &exponential = 0.1) {
+        // Constructs a matrix of kernel^2_1 scores, but rotated by 45 degrees.
+        // The reason is that k-mers for k >= 2 can be built based on 1-mers, but the shift between sequences must be preserved for all k-mer elements.
+        // Such matrix ensures that each vector has all possible k-mers for given shift.
+        // E.g. one of the vectors in the middle contains the following pairs: [(1,1), (2,2), (3,3), (4,4), ...],
+        // while the next contains: [(1,2), (2,3), (3,4), ...].
+        std::vector<std::vector<double>> kernel_2_1(sequence_1.size() + sequence_2.size() - 1);
+        for (LenSq i = sequence_1.original_length() - 1; i >= 0; --i) {
+
+        }
+
+        return 0.0;
+    }
+
+    template<typename INTERNAL>
     inline double kernel_2(typename tidysq::Sequence<INTERNAL>::const_iterator iterator_1_start,
                            typename tidysq::Sequence<INTERNAL>::const_iterator iterator_2_start,
                            const LenSq &kmer_length,
