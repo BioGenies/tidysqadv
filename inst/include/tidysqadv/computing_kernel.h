@@ -15,17 +15,60 @@ namespace tidysq {
                               const AlphSize &alph_size,
                               const LenSq &max_kmer_length,
                               const double &exponential = 0.1) {
+        const LenSq sequence_1_size = sequence_1.original_length();
+        const LenSq sequence_2_size = sequence_2.original_length();
+
         // Constructs a matrix of kernel^2_1 scores, but rotated by 45 degrees.
         // The reason is that k-mers for k >= 2 can be built based on 1-mers, but the shift between sequences must be preserved for all k-mer elements.
         // Such matrix ensures that each vector has all possible k-mers for given shift.
         // E.g. one of the vectors in the middle contains the following pairs: [(1,1), (2,2), (3,3), (4,4), ...],
         // while the next contains: [(1,2), (2,3), (3,4), ...].
-        std::vector<std::vector<double>> kernel_2_1(sequence_1.size() + sequence_2.size() - 1);
-        for (LenSq i = sequence_1.original_length() - 1; i >= 0; --i) {
+        std::vector<std::vector<double>> kernel_2_1(sequence_1_size + sequence_2_size - 1);
 
+        // Index keeps track of which vector is being filled
+        LenSq index = 0;
+        // Filling the first half of the matrix
+        for (; index < sequence_1_size; ++index) {
+            const LenSq sequence_1_start_index = sequence_1_size - index - 1;
+            const LenSq sequence_2_start_index = 0;
+            kernel_2_1[index] = std::vector<double>(std::min(index + 1, sequence_2_size));
+
+            for (LenSq j = 0; j < kernel_2_1[index].size(); ++j) {
+                kernel_2_1[index][j] = kernel_1(
+                        sequence_1[{sequence_1_start_index + j, alph_size}],
+                        sequence_2[{sequence_2_start_index + j, alph_size}]);
+            }
         }
 
-        return 0.0;
+        // Filling the second half
+        for (; index < sequence_1_size + sequence_2_size - 1; ++index) {
+            const LenSq sequence_1_start_index = 0;
+            const LenSq sequence_2_start_index = index + 1 - sequence_1_size;
+            kernel_2_1[index] = std::vector<double>(std::min(sequence_1_size + sequence_2_size - index - 1, sequence_1_size));
+
+            for (LenSq j = 0; j < kernel_2_1[index].size(); ++j) {
+                kernel_2_1[index][j] = kernel_1(
+                        sequence_1[{sequence_1_start_index + j, alph_size}],
+                        sequence_2[{sequence_2_start_index + j, alph_size}]);
+            }
+        }
+
+        double sum = 0.0;
+        index = 0;
+        for (; index < sequence_1_size + sequence_2_size - 1; ++index) {
+            for (LenSq i = 0; i < kernel_2_1[index].size(); ++i) {
+                double kmer_product = 1.0;
+                for (LenSq j = 0; j < max_kmer_length; ++j) {
+                    if (i + j >= kernel_2_1[index].size()) {
+                        break;
+                    }
+                    kmer_product *= kernel_2_1[index][i + j];
+                    sum += kmer_product;
+                }
+            }
+        }
+
+        return sum;
     }
 
     template<typename INTERNAL>
@@ -70,9 +113,9 @@ namespace tidysq {
                                        const AlphSize &alph_size,
                                        const LenSq &max_kmer_length,
                                        const double &exponential = 0.1) {
-        return kernel_3(sequence_1, sequence_2, alph_size, max_kmer_length, exponential) / sqrt(
-                kernel_3(sequence_1, sequence_1, alph_size, max_kmer_length, exponential) *
-                kernel_3(sequence_2, sequence_2, alph_size, max_kmer_length, exponential)
+        return kernels_2_3(sequence_1, sequence_2, alph_size, max_kmer_length, exponential) / sqrt(
+                kernels_2_3(sequence_1, sequence_1, alph_size, max_kmer_length, exponential) *
+                kernels_2_3(sequence_2, sequence_2, alph_size, max_kmer_length, exponential)
         );
     }
 
