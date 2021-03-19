@@ -36,26 +36,29 @@ namespace tidysq {
             for (LenSq j = 0; j < kernel_2_1[index].size(); ++j) {
                 kernel_2_1[index][j] = kernel_1(
                         sequence_1[{sequence_1_start_index + j, alph_size}],
-                        sequence_2[{sequence_2_start_index + j, alph_size}]);
+                        sequence_2[{sequence_2_start_index + j, alph_size}],
+                        exponential);
             }
         }
 
         // Filling the second half
-        for (; index < sequence_1_size + sequence_2_size - 1; ++index) {
+        for (; index < kernel_2_1.size(); ++index) {
             const LenSq sequence_1_start_index = 0;
-            const LenSq sequence_2_start_index = index + 1 - sequence_1_size;
+            // We start from (0, 1) here, because (0, 0) was already computed above
+            const LenSq sequence_2_start_index = index - sequence_1_size + 1;
             kernel_2_1[index] = std::vector<double>(std::min(sequence_1_size + sequence_2_size - index - 1, sequence_1_size));
 
             for (LenSq j = 0; j < kernel_2_1[index].size(); ++j) {
                 kernel_2_1[index][j] = kernel_1(
                         sequence_1[{sequence_1_start_index + j, alph_size}],
-                        sequence_2[{sequence_2_start_index + j, alph_size}]);
+                        sequence_2[{sequence_2_start_index + j, alph_size}],
+                        exponential);
             }
         }
 
         double sum = 0.0;
         index = 0;
-        for (; index < sequence_1_size + sequence_2_size - 1; ++index) {
+        for (; index < kernel_2_1.size(); ++index) {
             for (LenSq i = 0; i < kernel_2_1[index].size(); ++i) {
                 double kmer_product = 1.0;
                 for (LenSq j = 0; j < max_kmer_length; ++j) {
@@ -74,13 +77,13 @@ namespace tidysq {
     template<typename INTERNAL>
     inline double correlation_kernel_3(const Sequence<INTERNAL> &sequence_1,
                                        const Sequence<INTERNAL> &sequence_2,
+                                       const double &self_similarity_1,
+                                       const double &self_similarity_2,
                                        const AlphSize &alph_size,
                                        const LenSq &max_kmer_length,
                                        const double &exponential = 0.1) {
-        return kernels_2_3(sequence_1, sequence_2, alph_size, max_kmer_length, exponential) / sqrt(
-                kernels_2_3(sequence_1, sequence_1, alph_size, max_kmer_length, exponential) *
-                kernels_2_3(sequence_2, sequence_2, alph_size, max_kmer_length, exponential)
-        );
+        return kernels_2_3(sequence_1, sequence_2, alph_size, max_kmer_length, exponential) /
+            sqrt(self_similarity_1 * self_similarity_2);
     }
 
     template<typename INTERNAL>
@@ -92,12 +95,18 @@ namespace tidysq {
         }
 
         const AlphSize alph_size = sq.alphabet().alphabet_size();
+        // Initializes kernel_3 scores for similarity of sequences to themselves so that they aren't computed for each standardization
+        std::vector<double> self_similarity(sq.size(), 0);
+        for (LenSq i = 0; i < sq.size(); ++i) {
+            self_similarity[i] = kernels_2_3(sq[i].get(), sq[i].get(), alph_size, max_kmer_length, exponential);
+        }
+
         // Initializes returned correlation matrix with 1s, because correlation of a sequence to itself is equal to 1
         std::vector<std::vector<double>> ret(sq.size(), std::vector<double>(sq.size(), 1));
         for (LenSq i = 0; i < sq.size(); ++i) {
             for (LenSq j = i + 1; j < sq.size(); ++j) {
                 const double correlation_score = correlation_kernel_3(
-                        sq[i].get(), sq[j].get(), alph_size, max_kmer_length, exponential);
+                        sq[i].get(), sq[j].get(), self_similarity[i], self_similarity[j], alph_size, max_kmer_length, exponential);
                 ret[i][j] = correlation_score;
                 ret[j][i] = correlation_score;
             }
