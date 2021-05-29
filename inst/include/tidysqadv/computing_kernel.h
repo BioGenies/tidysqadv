@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include "Rcpp.h"
 #include <tidysq/tidysq-typedefs.h>
 #include "tidysqadv/constants/BLOSUM62_2.h"
 
@@ -109,6 +110,35 @@ namespace tidysq {
                         sq[i].get(), sq[j].get(), self_similarity[i], self_similarity[j], alph_size, max_kmer_length, exponential);
                 ret[i][j] = correlation_score;
                 ret[j][i] = correlation_score;
+            }
+        }
+        return ret;
+    }
+
+    // TODO: create typedef (or other structure) that allows for a generalized return from _Rcpp and default function
+//    template<>
+    inline Rcpp::NumericMatrix correlation_kernel_3_Rcpp(const Sq<RCPP_IT> &sq,
+                                                         const LenSq &max_kmer_length,
+                                                         const double &exponential = 0.1) {
+        if (sq.type() != AMI_BSC) {
+            throw std::invalid_argument("sq object must be of basic amino acid alphabet");
+        }
+
+        const AlphSize alph_size = sq.alphabet().alphabet_size();
+        // Initializes kernel_3 scores for similarity of sequences to themselves so that they aren't computed for each standardization
+        std::vector<double> self_similarity(sq.size(), 0);
+        for (LenSq i = 0; i < sq.size(); ++i) {
+            self_similarity[i] = kernels_2_3(sq[i].get(), sq[i].get(), alph_size, max_kmer_length, exponential);
+        }
+
+        // Initializes returned correlation matrix with 1s on diagonal, because correlation of a sequence to itself is equal to 1
+        Rcpp::NumericMatrix ret = Rcpp::NumericMatrix::diag(sq.size(), 1);
+        for (LenSq i = 0; i < sq.size(); ++i) {
+            for (LenSq j = i + 1; j < sq.size(); ++j) {
+                const double correlation_score = correlation_kernel_3(
+                        sq[i].get(), sq[j].get(), self_similarity[i], self_similarity[j], alph_size, max_kmer_length, exponential);
+                ret(i, j) = correlation_score;
+                ret(j, i) = correlation_score;
             }
         }
         return ret;
